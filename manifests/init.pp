@@ -59,6 +59,7 @@ class jira (
   $dbdriver                                                         = 'org.postgresql.Driver',
   $dbtype                                                           = 'postgres72',
   $dburl                                                            = undef,
+  Optional[String] $dbencoding                                      = 'UTF8'
   $poolsize                                                         = '20',
   $dbschema                                                         = 'public',
   # MySQL Connector Settings
@@ -194,7 +195,7 @@ class jira (
   else {
     $dburl_real = $db ? {
       'postgresql' => "jdbc:${db}://${dbserver}:${dbport}/${dbname}",
-      'mysql'      => "jdbc:${db}://${dbserver}:${dbport}/${dbname}?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB",
+      'mysql'      => "jdbc:${db}://${dbserver}:${dbport}/${dbname}?useUnicode=true&amp;characterEncoding=${dbencoding}&amp;sessionVariables=default_storage_engine=InnoDB",
       'oracle'     => "jdbc:${db}:thin:@${dbserver}:${dbport}:${dbname}",
       'sqlserver'  => "jdbc:jtds:${db}://${dbserver}:${dbport}/${dbname}"
     }
