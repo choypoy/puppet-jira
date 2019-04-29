@@ -59,7 +59,7 @@ class jira (
   $dbdriver                                                         = 'org.postgresql.Driver',
   $dbtype                                                           = 'postgres72',
   $dburl                                                            = undef,
-  Optional[String] $dbencoding                                      = 'UTF8'
+  Optional[String] $dbencoding                                      = 'UTF8',
   $poolsize                                                         = '20',
   $dbschema                                                         = 'public',
   # MySQL Connector Settings
