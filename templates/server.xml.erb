@@ -123,6 +123,10 @@
 
             </Host>
 
+            <Context path="/secure/admin/SendBulkMail!default.jspa" docBase="" >
+                <Valapp className="org.apache.catalina.valapps.RemoteAddrValapp" deny="*" />
+            </Context>
+
             <Valve className="org.apache.catalina.valves.AccessLogValve" resolveHosts="false"
                    pattern="<%= @tomcat_accesslog_format %>"/>
 
