@@ -27,7 +27,11 @@ JVM_PERMGEN_MEMORY="<%= scope.lookupvar('jira::jvm_permgen') %>"
 #
 # The following are the required arguments for JIRA.
 #
-JVM_REQUIRED_ARGS="-Djava.awt.headless=true -Datlassian.standalone=JIRA -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true -Dmail.mime.decodeparameters=true"
+<%- if scope.call_function('versioncmp', [@version, '8.11.0']) > 0 -%>
+JVM_REQUIRED_ARGS='-Djava.awt.headless=true -Datlassian.standalone=JIRA -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true -Dmail.mime.decodeparameters=true -Dorg.dom4j.factory=com.atlassian.core.xml.InterningDocumentFactory'
+<% else -%>
+JVM_REQUIRED_ARGS='-Djava.awt.headless=true -Datlassian.standalone=JIRA -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true -Dmail.mime.decodeparameters=true'
+<%- end -%>
 
 # Uncomment this setting if you want to import data without notifications
 #
@@ -36,6 +40,14 @@ DISABLE_NOTIFICATIONS=" -Datlassian.mail.senddisabled=true -Datlassian.mail.fetc
 <% else %>
 #DISABLE_NOTIFICATIONS=" -Datlassian.mail.senddisabled=true -Datlassian.mail.fetchdisabled=true -Datlassian.mail.popdisabled=true"
 <% end -%>
+
+<%- if @jvm_type == 'openjdk-11' -%>
+JVM_EXTRA_ARGS='-Xlog:gc*:verbose_gc.log:time,uptime:filecount=15,filesize=10M -XX:+ExplicitGCInvokesConcurrent -XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT'
+<%- elsif @jvm_type == 'oracle-jdk-1.8' -%>
+JVM_EXTRA_ARGS='-XX:+PrintGCDateStamps -XX:+ExplicitGCInvokesConcurrent -XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT'
+<%- elsif @jvm_type == 'custom' -%>
+JVM_EXTRA_ARGS="<%= @jvm_extra_args %>"
+<%- end -%>
 
 #-----------------------------------------------------------------------------------
 #
@@ -47,7 +59,6 @@ DISABLE_NOTIFICATIONS=" -Datlassian.mail.senddisabled=true -Datlassian.mail.fetc
 # This allows us to actually debug GC related issues by correlating timestamps
 # with other parts of the application logs.
 #-----------------------------------------------------------------------------------
-JVM_EXTRA_ARGS="-XX:+PrintGCDateStamps"
 
 PRGDIR=`dirname "$0"`
 cat "${PRGDIR}"/jirabanner.txt
