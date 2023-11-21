@@ -92,6 +92,9 @@ class jira (
   $jvm_permgen                                                      = '256m',
   $jvm_optional                                                     = '-XX:-HeapDumpOnOutOfMemoryError',
   $java_opts                                                        = '',
+  $jvm_extra_args                                                   = '-XX:+PrintGCDateStamps -XX:+ExplicitGCInvokesConcurrent -XX:-OmitStackTraceInFastThrow -Djava.locale.providers=COMPAT',
+  $jvm_gc_args                                                      = '-XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent',
+  Enum['openjdk-11', 'oracle-jdk-1.8', 'custom'] $jvm_type          = 'custom',
   $catalina_opts                                                    = '',
   # Misc Settings
   Stdlib::HTTPUrl $download_url                                     = 'https://product-downloads.atlassian.com/software/jira/downloads',
